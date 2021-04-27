@@ -1,0 +1,23 @@
+.x-form {
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__fc {
+    width: 100%;
+    margin: 0 0 20px 0 !important;
+
+    &.waterBase {
+
+      .Mui-disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .error {
+    color: #f44336;
+  }
+}
