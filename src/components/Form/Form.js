@@ -7,36 +7,15 @@ import InputWaterAmount from "./InputWaterAmount";
 import InputAddress from "./InputAddress";
 import { validationSchema } from "./ValidationSchema";
 import { useFormik } from "formik";
-import { parse } from "fast-xml-parser";
+import geo from '../../helpers/geo';
 
 function Form() {
   const [waterBases, setWaterBases] = useState([]);
   const [regionUuid, setRegionUuid] = useState("");
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      fetch(
-        `${process.env.REACT_APP_YA_GEO_URL}?apikey=${process.env.REACT_APP_YA_GEO_API_KEY}&geocode=${position.coords.longitude},${position.coords.latitude}`
-      )
-        .then((response) => response.text())
-        .then((textResponse) => {
-          const obj = parse(textResponse);
-          const locationName = obj.ymaps.GeoObjectCollection.featureMember[1].GeoObject.description.split(
-            ","
-          )[0];
-          setRegionUuid(getRegionUuidByName(locationName));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
+    geo.initializeRegion(setRegionUuid)
   }, []);
-
-  function getRegionUuidByName(name) {
-    return regionData.data.filter((region) =>
-      region.area_names.includes(name)
-    )[0].uuid;
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -50,7 +29,8 @@ function Form() {
     onSubmit: (values) => {
       formik.resetForm({});
       setRegionUuid('')
-      alert(JSON.stringify(values, null, 2));
+      alert(`Спасибо! Ваш заказ\n ${JSON.stringify(values, null, 2)}\n успешно сформирован. Ожидайте звонка от оператора.`
+      );
     },
   });
 
