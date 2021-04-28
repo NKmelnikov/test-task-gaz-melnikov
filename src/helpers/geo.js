@@ -18,6 +18,9 @@ const geo = {
       .then((response) => response.text())
       .then((textResponse) => {
         const obj = parse(textResponse);
+        if (obj.ymaps === undefined) {
+          console.error('Пожалуйста проверьте корректность ключа Yandex.api');
+        }
         const locationName = obj.ymaps.GeoObjectCollection.featureMember[1].GeoObject.description.split(
           ","
         )[0];
